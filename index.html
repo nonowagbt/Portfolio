@@ -13,6 +13,20 @@
         href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        // Apply saved/system theme and language before first paint
+        (function () {
+            var theme, lang;
+            try {
+                theme = localStorage.getItem('theme');
+                lang = localStorage.getItem('lang');
+            } catch (e) { }
+            if (!theme) theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+            if (!lang) lang = (navigator.language || 'fr').toLowerCase().indexOf('fr') === 0 ? 'fr' : 'en';
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.setAttribute('lang', lang);
+        })();
+    </script>
     <style>
         :root {
             --bg: #050507;
@@ -29,6 +43,41 @@
             --green: #4ade80;
             --radius: 14px;
             --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --heading: #fff;
+            --grid-line: rgba(255, 255, 255, 0.018);
+            --nav-bg: rgba(5, 5, 7, 0.75);
+            --menu-bg: rgba(5, 5, 7, 0.95);
+            --ghost-bg: rgba(0, 0, 0, 0.4);
+            --ghost-hover: rgba(255, 255, 255, 0.3);
+            --input-bg: rgba(0, 0, 0, 0.35);
+            --poly: rgba(255, 255, 255, 0.35);
+            --glow-top: rgba(139, 92, 246, 0.08);
+            color-scheme: dark;
+        }
+
+        :root[data-theme="light"] {
+            --bg: #f6f6f9;
+            --surface: rgba(255, 255, 255, 0.7);
+            --surface-2: rgba(17, 17, 24, 0.045);
+            --border: rgba(17, 17, 24, 0.09);
+            --border-strong: rgba(17, 17, 24, 0.17);
+            --text: #1d1d24;
+            --text-dim: #555562;
+            --text-faint: #80808c;
+            --accent: #7c3aed;
+            --accent-soft: #7c3aed;
+            --accent-glow: 0 0 0 1px rgba(124, 58, 237, 0.3), 0 10px 30px rgba(124, 58, 237, 0.12);
+            --green: #15803d;
+            --heading: #0d0d12;
+            --grid-line: rgba(17, 17, 24, 0.035);
+            --nav-bg: rgba(246, 246, 249, 0.8);
+            --menu-bg: rgba(246, 246, 249, 0.97);
+            --ghost-bg: rgba(255, 255, 255, 0.8);
+            --ghost-hover: rgba(17, 17, 24, 0.35);
+            --input-bg: #fff;
+            --poly: rgba(17, 17, 24, 0.28);
+            --glow-top: rgba(124, 58, 237, 0.1);
+            color-scheme: light;
         }
 
         *,
@@ -50,6 +99,7 @@
             line-height: 1.6;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         a {
@@ -76,9 +126,9 @@
             z-index: -1;
             pointer-events: none;
             background:
-                radial-gradient(ellipse 60% 40% at 50% 0%, rgba(139, 92, 246, 0.08), transparent 70%),
-                linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+                radial-gradient(ellipse 60% 40% at 50% 0%, var(--glow-top), transparent 70%),
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
             background-size: 100% 100%, 80px 80px, 80px 80px;
         }
 
@@ -100,7 +150,7 @@
         }
 
         nav.scrolled {
-            background: rgba(5, 5, 7, 0.75);
+            background: var(--nav-bg);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             border-color: var(--border);
@@ -120,7 +170,7 @@
             font-family: var(--mono);
             font-weight: 500;
             font-size: 1.1rem;
-            color: #fff;
+            color: var(--heading);
         }
 
         .nav-logo span {
@@ -141,26 +191,68 @@
 
         .nav-links a:hover,
         .nav-links a.active {
-            color: #fff;
+            color: var(--heading);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .icon-btn {
+            display: grid;
+            place-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            color: var(--text);
+            width: 38px;
+            height: 38px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--border-strong);
+            color: var(--heading);
+        }
+
+        .lang-switch {
+            display: inline-flex;
+            padding: 3px;
+            border-radius: 9px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        .lang-switch button {
+            background: none;
+            border: none;
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            padding: 0.4rem 0.55rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .lang-switch button[aria-pressed="true"] {
+            background: var(--surface-2);
+            color: var(--heading);
         }
 
         .nav-mobile-btn {
             display: none;
-            background: none;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text);
-            width: 40px;
-            height: 40px;
-            font-size: 1rem;
-            cursor: pointer;
         }
 
         .mobile-menu {
             display: none;
             flex-direction: column;
             padding: 0.5rem 1.5rem 1.5rem;
-            background: rgba(5, 5, 7, 0.95);
+            background: var(--menu-bg);
             border-bottom: 1px solid var(--border);
         }
 
@@ -189,11 +281,11 @@
             font-size: clamp(1.8rem, 3.5vw, 2.4rem);
             font-weight: 600;
             letter-spacing: -0.02em;
-            color: #fff;
+            color: var(--heading);
         }
 
         .section-title span {
-            background: linear-gradient(90deg, #fff, var(--accent-soft));
+            background: linear-gradient(90deg, var(--heading), var(--accent-soft));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -271,12 +363,12 @@
         }
 
         .btn-ghost {
-            background: rgba(0, 0, 0, 0.4);
+            background: var(--ghost-bg);
             color: var(--text);
         }
 
         .btn-ghost:hover {
-            border-color: rgba(255, 255, 255, 0.3);
+            border-color: var(--ghost-hover);
         }
 
         .reveal {
@@ -318,12 +410,12 @@
             line-height: 1.02;
             font-weight: 700;
             letter-spacing: -0.035em;
-            color: #fff;
+            color: var(--heading);
             margin: 0.3rem 0 0.9rem;
         }
 
         .hero-name span {
-            background: linear-gradient(90deg, #fff 10%, var(--accent-soft));
+            background: linear-gradient(90deg, var(--heading) 10%, var(--accent-soft));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -334,12 +426,12 @@
             line-height: 1.2;
             font-weight: 500;
             letter-spacing: -0.02em;
-            color: #fff;
+            color: var(--heading);
             margin-bottom: 1rem;
         }
 
         .hero-title span {
-            background: linear-gradient(90deg, #fff 10%, var(--accent-soft));
+            background: linear-gradient(90deg, var(--heading) 10%, var(--accent-soft));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -365,7 +457,15 @@
         }
 
         .terminal {
-            background: rgba(10, 10, 14, 0.85);
+            --text: #ececf1;
+            --text-dim: #8d8d99;
+            --heading: #fff;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.16);
+            --accent-soft: #a78bfa;
+            --green: #4ade80;
+            color: var(--text);
+            background: rgba(10, 10, 14, 0.92);
             border: 1px solid var(--border-strong);
             border-radius: var(--radius);
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(139, 92, 246, 0.08);
@@ -438,7 +538,7 @@
 
         .poly {
             position: absolute;
-            color: rgba(255, 255, 255, 0.35);
+            color: var(--poly);
             pointer-events: none;
             animation: float 14s ease-in-out infinite;
         }
@@ -506,7 +606,7 @@
         .card-title {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #fff;
+            color: var(--heading);
             margin-bottom: 1rem;
         }
 
@@ -539,7 +639,7 @@
             display: block;
             font-size: 1.6rem;
             font-weight: 600;
-            color: #fff;
+            color: var(--heading);
         }
 
         .stat span {
@@ -619,13 +719,13 @@
         }
 
         .tab:hover {
-            color: #fff;
+            color: var(--heading);
         }
 
         .tab.active {
             background: var(--surface-2);
             border-color: var(--border-strong);
-            color: #fff;
+            color: var(--heading);
         }
 
         /* SKILLS */
@@ -670,14 +770,14 @@
             display: grid;
             place-items: center;
             font-size: 1.6rem;
-            color: #fff;
+            color: var(--heading);
         }
 
         .skill-icon.mono {
             font-family: var(--mono);
             font-size: 0.85rem;
             font-weight: 500;
-            border: 1.5px solid #fff;
+            border: 1.5px solid var(--heading);
             border-radius: 6px;
             width: 34px;
             height: 34px;
@@ -774,7 +874,7 @@
         .project h3 {
             font-size: 1.08rem;
             font-weight: 600;
-            color: #fff;
+            color: var(--heading);
         }
 
         .project-head i {
@@ -896,7 +996,7 @@
 
         .t-title {
             font-weight: 600;
-            color: #fff;
+            color: var(--heading);
             margin: 0.15rem 0;
         }
 
@@ -984,7 +1084,7 @@
         }
 
         .socials a:hover {
-            color: #fff;
+            color: var(--heading);
             border-color: rgba(139, 92, 246, 0.6);
             box-shadow: var(--accent-glow);
         }
@@ -1010,7 +1110,7 @@
         .form input,
         .form textarea {
             width: 100%;
-            background: rgba(0, 0, 0, 0.35);
+            background: var(--input-bg);
             border: 1px solid var(--border);
             border-radius: 9px;
             padding: 0.75rem 0.9rem;
@@ -1068,7 +1168,7 @@
             }
 
             .nav-mobile-btn {
-                display: block;
+                display: grid;
             }
 
             section {
@@ -1140,22 +1240,32 @@
         <div class="nav-inner">
             <a href="#accueil" class="nav-logo">&lt;<span>/</span>&gt; noham_agboton</a>
             <ul class="nav-links">
-                <li><a href="#accueil">Accueil</a></li>
-                <li><a href="#projets">Projets</a></li>
-                <li><a href="#competences">Compétences</a></li>
-                <li><a href="#experience">Expérience</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#accueil" data-i18n="nav.home">Accueil</a></li>
+                <li><a href="#projets" data-i18n="nav.projects">Projets</a></li>
+                <li><a href="#competences" data-i18n="nav.skills">Compétences</a></li>
+                <li><a href="#experience" data-i18n="nav.experience">Expérience</a></li>
+                <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
             </ul>
-            <button class="nav-mobile-btn" id="mobile-menu-btn" aria-label="Menu" aria-expanded="false">
-                <i class="fas fa-bars"></i>
-            </button>
+            <div class="nav-actions">
+                <div class="lang-switch" role="group" aria-label="Langue / Language">
+                    <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+                    <button type="button" data-lang="en" aria-pressed="false">EN</button>
+                </div>
+                <button type="button" class="icon-btn" id="theme-toggle" data-i18n-aria="nav.theme"
+                    aria-label="Changer de thème">
+                    <i class="fas fa-sun"></i>
+                </button>
+                <button class="icon-btn nav-mobile-btn" id="mobile-menu-btn" aria-label="Menu" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </div>
         <div class="mobile-menu" id="mobile-menu">
-            <a href="#accueil">Accueil</a>
-            <a href="#projets">Projets</a>
-            <a href="#competences">Compétences</a>
-            <a href="#experience">Expérience</a>
-            <a href="#contact">Contact</a>
+            <a href="#accueil" data-i18n="nav.home">Accueil</a>
+            <a href="#projets" data-i18n="nav.projects">Projets</a>
+            <a href="#competences" data-i18n="nav.skills">Compétences</a>
+            <a href="#experience" data-i18n="nav.experience">Expérience</a>
+            <a href="#contact" data-i18n="nav.contact">Contact</a>
         </div>
     </nav>
 
@@ -1163,12 +1273,13 @@
     <section id="accueil">
         <div class="container hero-grid">
             <div class="reveal">
-                <span class="pill"><i class="fas fa-circle"></i> Développeur Fullstack &amp; Logiciel</span>
-                <p class="hero-hello">Bonjour, je suis</p>
+                <span class="pill"><i class="fas fa-circle"></i> <span data-i18n="hero.role">Développeur Fullstack
+                        &amp; Logiciel</span></span>
+                <p class="hero-hello" data-i18n="hero.hello">Bonjour, je suis</p>
                 <h1 class="hero-name">Noham <span>Agboton</span></h1>
-                <p class="hero-title">Je transforme des <span>idées</span> en applications.</p>
-                <p class="hero-sub">Étudiant en 5ème année à Epitech, je conçois et déploie des applications web,
-                    mobiles et IoT, du front-end jusqu'à l'infrastructure.</p>
+                <p class="hero-title" data-i18n="hero.title">Je transforme des <span>idées</span> en applications.</p>
+                <p class="hero-sub" data-i18n="hero.sub">Étudiant en 5ème année à Epitech, je conçois et déploie des
+                    applications web, mobiles et IoT, du front-end jusqu'à l'infrastructure.</p>
                 <div class="hero-chips">
                     <span class="chip">C / C++</span>
                     <span class="chip">Python</span>
@@ -1181,8 +1292,9 @@
                     <span class="chip">…</span>
                 </div>
                 <div class="hero-btns">
-                    <a href="#projets" class="btn btn-primary">Voir mes projets <i class="fas fa-arrow-right"></i></a>
-                    <a href="#contact" class="btn btn-ghost">Me contacter</a>
+                    <a href="#projets" class="btn btn-primary"><span data-i18n="hero.cta1">Voir mes projets</span> <i
+                            class="fas fa-arrow-right"></i></a>
+                    <a href="#contact" class="btn btn-ghost" data-i18n="hero.cta2">Me contacter</a>
                 </div>
             </div>
 
@@ -1214,7 +1326,8 @@
                         <span class="dot" style="background:#28c840"></span>
                         <span class="title">noham@portfolio: ~</span>
                     </div>
-                    <div class="terminal-body" id="terminal" aria-label="Terminal de présentation"></div>
+                    <div class="terminal-body" id="terminal" data-i18n-aria="hero.terminal"
+                        aria-label="Terminal de présentation"></div>
                 </div>
             </div>
         </div>
@@ -1224,38 +1337,42 @@
     <section id="a-propos">
         <div class="container">
             <div class="section-head reveal">
-                <h2 class="section-title">À <span>propos</span></h2>
+                <h2 class="section-title" data-i18n="about.title">À <span>propos</span></h2>
             </div>
             <div class="about-grid">
                 <div class="panel about-text reveal">
-                    <h3>Qui suis-je ?</h3>
-                    <p>Développeur <strong>Fullstack &amp; Logiciel</strong> en 5ème année à EPITECH, actuellement en
-                        stage de fin d'études. Passionné par l'informatique, je suis spécialisé dans le développement
-                        <strong>Web et Mobile</strong>, avec une spécialisation <strong>IoT / AIoT</strong> acquise à
-                        EPITECH Barcelone.</p>
-                    <p>Je maîtrise les stacks Core et DevOps, et j'aime concevoir, développer et déployer des solutions
-                        logicielles robustes, toujours en équipe.</p>
+                    <h3 data-i18n="about.who">Qui suis-je ?</h3>
+                    <p data-i18n="about.p1">Développeur <strong>Fullstack &amp; Logiciel</strong> en 5ème année à
+                        EPITECH, actuellement en stage de fin d'études. Passionné par l'informatique, je suis spécialisé
+                        dans le développement <strong>Web et Mobile</strong>, avec une spécialisation <strong>IoT /
+                            AIoT</strong> acquise à EPITECH Barcelone.</p>
+                    <p data-i18n="about.p2">Je maîtrise les stacks Core et DevOps, et j'aime concevoir, développer et
+                        déployer des solutions logicielles robustes, toujours en équipe.</p>
                     <div class="stats">
-                        <div class="stat"><b>3</b><span>Expériences pro</span></div>
-                        <div class="stat"><b>9</b><span>Projets</span></div>
-                        <div class="stat"><b>8</b><span>Langages</span></div>
+                        <div class="stat"><b>3</b><span data-i18n="about.stat1">Expériences pro</span></div>
+                        <div class="stat"><b>9</b><span data-i18n="about.stat2">Projets</span></div>
+                        <div class="stat"><b>8</b><span data-i18n="about.stat3">Langages</span></div>
                     </div>
                 </div>
                 <div class="panel facts reveal">
                     <div class="fact"><i class="fas fa-location-dot"></i>
-                        <div><small>Basé à</small>Strasbourg — Permis B (véhiculé)</div>
+                        <div><small data-i18n="about.f1k">Basé à</small><span data-i18n="about.f1">Strasbourg — Permis
+                                B (véhiculé)</span></div>
                     </div>
                     <div class="fact"><i class="fas fa-graduation-cap"></i>
-                        <div><small>Formation</small>EPITECH — Expert en Ingénierie Logicielle (Bac+5)</div>
+                        <div><small data-i18n="about.f2k">Formation</small><span data-i18n="about.f2">EPITECH — Expert
+                                en Ingénierie Logicielle (Bac+5)</span></div>
                     </div>
                     <div class="fact"><i class="fas fa-microchip"></i>
-                        <div><small>Spécialité</small>IoT &amp; AIoT</div>
+                        <div><small data-i18n="about.f3k">Spécialité</small>IoT &amp; AIoT</div>
                     </div>
                     <div class="fact"><i class="fas fa-language"></i>
-                        <div><small>Langues</small>Français, Anglais (B1), Espagnol (A1)</div>
+                        <div><small data-i18n="about.f4k">Langues</small><span data-i18n="about.f4">Français, Anglais
+                                (B1), Espagnol (A1)</span></div>
                     </div>
                     <div class="fact"><i class="fas fa-futbol"></i>
-                        <div><small>Loisirs</small>Football en club, musculation</div>
+                        <div><small data-i18n="about.f5k">Loisirs</small><span data-i18n="about.f5">Football en club,
+                                musculation</span></div>
                     </div>
                 </div>
             </div>
@@ -1266,20 +1383,24 @@
     <section id="projets">
         <div class="container">
             <div class="section-head reveal">
-                <h2 class="section-title">Mes <span>projets</span></h2>
-                <p class="section-sub">Projets personnels, professionnels et réalisés à Epitech.</p>
+                <h2 class="section-title" data-i18n="projects.title">Mes <span>projets</span></h2>
+                <p class="section-sub" data-i18n="projects.sub">Projets personnels, professionnels et réalisés à
+                    Epitech.</p>
             </div>
 
             <div class="projects-toolbar reveal">
                 <div class="tabs" role="tablist" id="project-tabs">
-                    <button class="tab active" data-filter="all"><i class="fas fa-layer-group"></i> Tous</button>
+                    <button class="tab active" data-filter="all"><i class="fas fa-layer-group"></i> <span
+                            data-i18n="projects.all">Tous</span></button>
                     <button class="tab" data-filter="web"><i class="fas fa-globe"></i> Web</button>
                     <button class="tab" data-filter="mobile"><i class="fas fa-mobile-alt"></i> Mobile</button>
-                    <button class="tab" data-filter="systems"><i class="fas fa-terminal"></i> Systèmes</button>
+                    <button class="tab" data-filter="systems"><i class="fas fa-terminal"></i> <span
+                            data-i18n="projects.systems">Systèmes</span></button>
                     <button class="tab" data-filter="iot"><i class="fas fa-microchip"></i> IoT</button>
                 </div>
                 <label class="search">
                     <input type="search" id="project-search" placeholder="Rechercher un projet..."
+                        data-i18n-ph="projects.search" data-i18n-aria="projects.search"
                         aria-label="Rechercher un projet">
                     <i class="fas fa-magnifying-glass"></i>
                 </label>
@@ -1288,33 +1409,34 @@
             <div class="projects-grid" id="projects-grid">
                 <article class="project" data-cat="web mobile">
                     <div class="project-head">
-                        <h3>MySquad</h3><span class="live">En ligne</span>
+                        <h3>MySquad</h3><span class="live" data-i18n="projects.live">En ligne</span>
                     </div>
                     <div class="project-tags"><span class="chip">PWA</span><span class="chip">Mobile-first</span><span
                             class="chip">Auth</span><span class="chip">Chat</span></div>
-                    <p>Application web (PWA mobile-first) de gestion d'équipe de football amateur : convocations,
-                        compositions, statistiques, fil d'actualité, chat et bien plus — pensée pour un coach et ses
-                        joueurs, installable comme une app sur mobile sans passer par un store.</p>
+                    <p data-i18n="p.mysquad">Application web (PWA mobile-first) de gestion d'équipe de football
+                        amateur : convocations, compositions, statistiques, fil d'actualité, chat et bien plus — pensée
+                        pour un coach et ses joueurs, installable comme une app sur mobile sans passer par un store.</p>
                     <div class="project-links">
-                        <a href="https://mysquad.entreprise-vilocy.fr" target="_blank" rel="noopener">Voir le projet <i
-                                class="fas fa-arrow-right"></i></a>
+                        <a href="https://mysquad.entreprise-vilocy.fr" target="_blank" rel="noopener"><span
+                                data-i18n="projects.view">Voir le projet</span> <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </article>
 
                 <article class="project" data-cat="web">
                     <div class="project-head">
-                        <h3>Sacusi Coiff</h3><span class="live">En ligne</span>
+                        <h3>Sacusi Coiff</h3><span class="live" data-i18n="projects.live">En ligne</span>
                     </div>
-                    <div class="project-tags"><span class="chip">Calendrier</span><span
-                            class="chip">Réservation</span><span class="chip">Web App</span></div>
-                    <p>Site vitrine d'une coiffeuse afro à domicile sur Strasbourg. J'ai développé le système de
-                        calendrier de réservation en ligne derrière : un agenda par famille de prestations, pour que les
-                        clientes réservent leur créneau directement.</p>
+                    <div class="project-tags"><span class="chip" data-i18n="tag.calendar">Calendrier</span><span
+                            class="chip" data-i18n="tag.booking">Réservation</span><span class="chip">Web App</span>
+                    </div>
+                    <p data-i18n="p.sacusi">Site vitrine d'une coiffeuse afro à domicile sur Strasbourg. J'ai développé
+                        le système de calendrier de réservation en ligne derrière : un agenda par famille de
+                        prestations, pour que les clientes réservent leur créneau directement.</p>
                     <div class="project-links">
-                        <a href="https://sacusicoiff.lovable.app/" target="_blank" rel="noopener">Site <i
-                                class="fas fa-arrow-right"></i></a>
-                        <a href="https://calen-sa.entreprise-vilocy.fr" target="_blank" rel="noopener">Calendrier <i
-                                class="fas fa-arrow-right"></i></a>
+                        <a href="https://sacusicoiff.lovable.app/" target="_blank" rel="noopener"><span
+                                data-i18n="projects.site">Site</span> <i class="fas fa-arrow-right"></i></a>
+                        <a href="https://calen-sa.entreprise-vilocy.fr" target="_blank" rel="noopener"><span
+                                data-i18n="tag.calendar">Calendrier</span> <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </article>
 
@@ -1323,9 +1445,9 @@
                         <h3>Game Changer</h3><i class="fas fa-dumbbell"></i>
                     </div>
                     <div class="project-tags"><span class="chip">React Native</span><span class="chip">Expo</span><span
-                            class="chip">IA</span><span class="chip">GPS</span></div>
-                    <p>App mobile de fitness complète : création d'entraînements, tracker GPS de course, scanner
-                        alimentaire par IA, analyse morphologique et aspect social complet.</p>
+                            class="chip" data-i18n="tag.ai">IA</span><span class="chip">GPS</span></div>
+                    <p data-i18n="p.gamechanger">App mobile de fitness complète : création d'entraînements, tracker GPS
+                        de course, scanner alimentaire par IA, analyse morphologique et aspect social complet.</p>
                     <div class="project-links">
                         <a href="https://github.com/nonowagbt/Game_changer" target="_blank" rel="noopener"><i
                                 class="fab fa-github"></i> Code <i class="fas fa-arrow-right"></i></a>
@@ -1338,8 +1460,8 @@
                     </div>
                     <div class="project-tags"><span class="chip">API REST</span><span class="chip">OAuth2</span><span
                             class="chip">Web</span><span class="chip">Mobile</span></div>
-                    <p>Plateforme d'automatisation façon IFTTT / Zapier : une action sur un service déclenche une
-                        réaction sur un autre. Serveur, client web et client mobile. Projet Epitech.</p>
+                    <p data-i18n="p.area">Plateforme d'automatisation façon IFTTT / Zapier : une action sur un service
+                        déclenche une réaction sur un autre. Serveur, client web et client mobile. Projet Epitech.</p>
                     <div class="project-links">
                         <a href="https://github.com/nonowagbt" target="_blank" rel="noopener"><i
                                 class="fab fa-github"></i> Code <i class="fas fa-arrow-right"></i></a>
@@ -1352,8 +1474,8 @@
                     </div>
                     <div class="project-tags"><span class="chip">C++</span><span class="chip">ECS</span><span
                             class="chip">UDP</span><span class="chip">CMake</span></div>
-                    <p>Remake multijoueur en réseau du shoot'em up R-Type : moteur de jeu maison et architecture
-                        client / serveur. Projet Epitech.</p>
+                    <p data-i18n="p.rtype">Remake multijoueur en réseau du shoot'em up R-Type : moteur de jeu maison et
+                        architecture client / serveur. Projet Epitech.</p>
                     <div class="project-links">
                         <a href="https://github.com/nonowagbt" target="_blank" rel="noopener"><i
                                 class="fab fa-github"></i> Code <i class="fas fa-arrow-right"></i></a>
@@ -1366,8 +1488,9 @@
                     </div>
                     <div class="project-tags"><span class="chip">ESP32</span><span class="chip">IoT</span><span
                             class="chip">C++</span><span class="chip">MQTT</span></div>
-                    <p>Objet connecté sur microcontrôleur ESP32 : lecture de capteurs, envoi des données et pilotage à
-                        distance. Réalisé pendant la spécialisation IoT / AIoT à Epitech Barcelone.</p>
+                    <p data-i18n="p.esp32">Objet connecté sur microcontrôleur ESP32 : lecture de capteurs, envoi des
+                        données et pilotage à distance. Réalisé pendant la spécialisation IoT / AIoT à Epitech
+                        Barcelone.</p>
                     <div class="project-links">
                         <a href="https://github.com/nonowagbt" target="_blank" rel="noopener"><i
                                 class="fab fa-github"></i> Code <i class="fas fa-arrow-right"></i></a>
@@ -1379,7 +1502,8 @@
                         <h3>SmartPlanner</h3><i class="fas fa-calendar-days"></i>
                     </div>
                     <div class="project-tags"><span class="chip">Web App</span><span class="chip">Planning</span></div>
-                    <p>Application de planification intelligente pour organiser ses tâches et son emploi du temps.</p>
+                    <p data-i18n="p.smartplanner">Application de planification intelligente pour organiser ses tâches et
+                        son emploi du temps.</p>
                     <div class="project-links">
                         <a href="https://github.com/nonowagbt" target="_blank" rel="noopener"><i
                                 class="fab fa-github"></i> Code <i class="fas fa-arrow-right"></i></a>
@@ -1392,8 +1516,8 @@
                     </div>
                     <div class="project-tags"><span class="chip">React</span><span class="chip">Node.js</span><span
                             class="chip">MongoDB</span></div>
-                    <p>Application web pour tracker et analyser vos habitudes quotidiennes avec visualisations et
-                        statistiques avancées.</p>
+                    <p data-i18n="p.habit">Application web pour tracker et analyser vos habitudes quotidiennes avec
+                        visualisations et statistiques avancées.</p>
                     <div class="project-links">
                         <a href="https://github.com/nonowagbt" target="_blank" rel="noopener"><i
                                 class="fab fa-github"></i> Code <i class="fas fa-arrow-right"></i></a>
@@ -1402,19 +1526,20 @@
 
                 <article class="project" data-cat="systems">
                     <div class="project-head">
-                        <h3>Projet Réseaux</h3><i class="fas fa-network-wired"></i>
+                        <h3 data-i18n="p.network.title">Projet Réseaux</h3><i class="fas fa-network-wired"></i>
                     </div>
                     <div class="project-tags"><span class="chip">C</span><span class="chip">Socket</span><span
                             class="chip">TCP/IP</span></div>
-                    <p>Client / Serveur avec gestion des connexions TCP/IP et protocoles personnalisés, développé en C
-                        à Epitech.</p>
+                    <p data-i18n="p.network">Client / Serveur avec gestion des connexions TCP/IP et protocoles
+                        personnalisés, développé en C à Epitech.</p>
                     <div class="project-links">
                         <a href="https://github.com/nonowagbt" target="_blank" rel="noopener"><i
                                 class="fab fa-github"></i> Code <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </article>
             </div>
-            <p class="empty" id="projects-empty">// Aucun projet ne correspond à la recherche.</p>
+            <p class="empty" id="projects-empty" data-i18n="projects.empty">// Aucun projet ne correspond à la
+                recherche.</p>
         </div>
     </section>
 
@@ -1422,16 +1547,16 @@
     <section id="competences">
         <div class="container">
             <div class="panel skills-panel reveal">
-                <h2 class="section-title">Stack technique &amp; <span>compétences</span></h2>
-                <p class="section-sub">Développées à Epitech (Strasbourg &amp; Barcelone), en entreprise et en
-                    autodidacte.</p>
+                <h2 class="section-title" data-i18n="skills.title">Stack technique &amp; <span>compétences</span></h2>
+                <p class="section-sub" data-i18n="skills.sub">Développées à Epitech (Strasbourg &amp; Barcelone), en
+                    entreprise et en autodidacte.</p>
                 <div style="margin-top:1.8rem">
                     <div class="tabs" role="tablist" id="skill-tabs">
-                        <button class="tab active" data-filter="lang">Langages</button>
+                        <button class="tab active" data-filter="lang" data-i18n="skills.lang">Langages</button>
                         <button class="tab" data-filter="front">Frontend</button>
                         <button class="tab" data-filter="back">Backend</button>
                         <button class="tab" data-filter="devops">DevOps</button>
-                        <button class="tab" data-filter="iot">IoT &amp; IA</button>
+                        <button class="tab" data-filter="iot" data-i18n="skills.iot">IoT &amp; IA</button>
                     </div>
                 </div>
                 <div class="skills-grid" id="skills-grid">
@@ -1481,23 +1606,25 @@
                     <div class="skill" data-cat="devops"><span class="skill-icon"><i
                                 class="fab fa-git-alt"></i></span><span class="skill-name">Git</span></div>
                     <div class="skill" data-cat="devops"><span class="skill-icon"><i
-                                class="fas fa-network-wired"></i></span><span class="skill-name">Réseaux</span></div>
+                                class="fas fa-network-wired"></i></span><span class="skill-name"
+                            data-i18n="skills.network">Réseaux</span></div>
                     <div class="skill" data-cat="devops"><span class="skill-icon"><i
                                 class="fas fa-hammer"></i></span><span class="skill-name">Makefile</span></div>
                     <div class="skill" data-cat="devops"><span class="skill-icon"><i
                                 class="fas fa-bug"></i></span><span class="skill-name">GDB / Valgrind</span></div>
                     <div class="skill" data-cat="devops"><span class="skill-icon"><i
-                                class="fas fa-arrows-spin"></i></span><span class="skill-name">Méthodes Agiles</span>
-                    </div>
+                                class="fas fa-arrows-spin"></i></span><span class="skill-name"
+                            data-i18n="skills.agile">Méthodes Agiles</span></div>
 
                     <div class="skill" data-cat="iot"><span class="skill-icon"><i
-                                class="fas fa-microchip"></i></span><span class="skill-name">Systèmes embarqués</span>
-                    </div>
+                                class="fas fa-microchip"></i></span><span class="skill-name"
+                            data-i18n="skills.embedded">Systèmes embarqués</span></div>
                     <div class="skill" data-cat="iot"><span class="skill-icon"><i
-                                class="fas fa-wifi"></i></span><span class="skill-name">Objets connectés</span></div>
+                                class="fas fa-wifi"></i></span><span class="skill-name"
+                            data-i18n="skills.connected">Objets connectés</span></div>
                     <div class="skill" data-cat="iot"><span class="skill-icon"><i
-                                class="fas fa-brain"></i></span><span class="skill-name">IA appliquée à l'IoT</span>
-                    </div>
+                                class="fas fa-brain"></i></span><span class="skill-name"
+                            data-i18n="skills.aiot">IA appliquée à l'IoT</span></div>
                 </div>
             </div>
         </div>
@@ -1507,68 +1634,82 @@
     <section id="experience">
         <div class="container">
             <div class="section-head reveal">
-                <h2 class="section-title">Mon <span>parcours</span></h2>
+                <h2 class="section-title" data-i18n="journey.title">Mon <span>parcours</span></h2>
             </div>
             <div class="journey">
                 <div class="panel journey-col reveal">
-                    <h3 class="card-title"><i class="fas fa-briefcase"></i> Expérience</h3>
+                    <h3 class="card-title"><i class="fas fa-briefcase"></i> <span
+                            data-i18n="journey.exp">Expérience</span></h3>
                     <div class="timeline">
                         <div class="t-item">
                             <div class="t-date">2024 – 2025</div>
-                            <div class="t-title">Support Info. &amp; Développeur Fullstack (Stage)</div>
+                            <div class="t-title" data-i18n="exp1.title">Support Info. &amp; Développeur Fullstack
+                                (Stage)</div>
                             <div class="t-place">GIP-FCIP — Strasbourg</div>
                             <ul class="t-list">
-                                <li>Développement Fullstack : front-end (HTML/CSS/JS) et back-end (PHP/Node.js).</li>
-                                <li>Architecture : gestion de l'architecture des bases de données SQL.</li>
-                                <li>Maintenance : support et maintenance du matériel informatique.</li>
+                                <li data-i18n="exp1.l1">Développement Fullstack : front-end (HTML/CSS/JS) et back-end
+                                    (PHP/Node.js).</li>
+                                <li data-i18n="exp1.l2">Architecture : gestion de l'architecture des bases de données
+                                    SQL.</li>
+                                <li data-i18n="exp1.l3">Maintenance : support et maintenance du matériel informatique.
+                                </li>
                             </ul>
                         </div>
                         <div class="t-item">
                             <div class="t-date">2023</div>
-                            <div class="t-title">Support Informatique</div>
+                            <div class="t-title" data-i18n="exp2.title">Support Informatique</div>
                             <div class="t-place">C.A.F. — Strasbourg</div>
                             <ul class="t-list">
-                                <li>Assistance utilisateur (N1) et résolution de pannes matérielles.</li>
-                                <li>Gestion de l'inventaire et remplacement du parc informatique.</li>
+                                <li data-i18n="exp2.l1">Assistance utilisateur (N1) et résolution de pannes matérielles.
+                                </li>
+                                <li data-i18n="exp2.l2">Gestion de l'inventaire et remplacement du parc informatique.
+                                </li>
                             </ul>
                         </div>
                         <div class="t-item">
                             <div class="t-date">2023</div>
-                            <div class="t-title">Développeur Fullstack (Stage)</div>
+                            <div class="t-title" data-i18n="exp3.title">Développeur Fullstack (Stage)</div>
                             <div class="t-place">MikadoPublicis — Luxembourg</div>
                             <ul class="t-list">
-                                <li>Back-end : implémentation de fonctionnalités avec PHP, Laravel et WordPress.</li>
-                                <li>Front-end : participation à l'intégration (HTML/CSS) et suivi de projet client.</li>
+                                <li data-i18n="exp3.l1">Back-end : implémentation de fonctionnalités avec PHP, Laravel
+                                    et WordPress.</li>
+                                <li data-i18n="exp3.l2">Front-end : participation à l'intégration (HTML/CSS) et suivi
+                                    de projet client.</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
                 <div class="panel journey-col reveal" id="formation">
-                    <h3 class="card-title"><i class="fas fa-graduation-cap"></i> Formation</h3>
+                    <h3 class="card-title"><i class="fas fa-graduation-cap"></i> <span
+                            data-i18n="journey.edu">Formation</span></h3>
                     <div class="timeline">
                         <div class="t-item">
-                            <div class="t-date">Depuis 2022</div>
-                            <div class="t-title">Expert en Ingénierie Logicielle (Bac+5 / RNCP7)</div>
+                            <div class="t-date" data-i18n="edu1.date">Depuis 2022</div>
+                            <div class="t-title" data-i18n="edu1.title">Expert en Ingénierie Logicielle (Bac+5 / RNCP7)
+                            </div>
                             <div class="t-place">EPITECH — Strasbourg</div>
                             <ul class="t-list">
-                                <li>5ème et dernière année en cours (stage de fin d'études). Bachelor obtenu.</li>
+                                <li data-i18n="edu1.l1">5ème et dernière année en cours (stage de fin d'études).
+                                    Bachelor obtenu.</li>
                             </ul>
                         </div>
                         <div class="t-item">
-                            <div class="t-date">Cursus international</div>
-                            <div class="t-title">Spécialisation IoT &amp; AIoT</div>
-                            <div class="t-place">EPITECH — Barcelone</div>
+                            <div class="t-date" data-i18n="edu2.date">Cursus international</div>
+                            <div class="t-title" data-i18n="edu2.title">Spécialisation IoT &amp; AIoT</div>
+                            <div class="t-place" data-i18n="edu2.place">EPITECH — Barcelone</div>
                             <ul class="t-list">
-                                <li>Internet des Objets (IoT) et Intelligence Artificielle des Objets (AIoT).</li>
+                                <li data-i18n="edu2.l1">Internet des Objets (IoT) et Intelligence Artificielle des
+                                    Objets (AIoT).</li>
                             </ul>
                         </div>
                         <div class="t-item">
                             <div class="t-date">2019 – 2022</div>
-                            <div class="t-title">Baccalauréat Général Scientifique</div>
+                            <div class="t-title" data-i18n="edu3.title">Baccalauréat Général Scientifique</div>
                             <div class="t-place">Lycée Sainte-Clotilde — Strasbourg</div>
                             <ul class="t-list">
-                                <li>Spécialités : Physique-Chimie, Numérique et Sciences Informatiques (NSI).</li>
+                                <li data-i18n="edu3.l1">Spécialités : Physique-Chimie, Numérique et Sciences
+                                    Informatiques (NSI).</li>
                             </ul>
                         </div>
                     </div>
@@ -1582,19 +1723,20 @@
         <div class="container">
             <div class="panel contact-panel reveal">
                 <div>
-                    <h2 class="section-title" style="font-size:1.6rem;margin-bottom:0.8rem">Travaillons
-                        <span>ensemble</span></h2>
-                    <p>Un projet en tête, une offre de stage ou d'emploi, ou simplement envie d'échanger ? Écrivez-moi.
-                    </p>
+                    <h2 class="section-title" style="font-size:1.6rem;margin-bottom:0.8rem"
+                        data-i18n="contact.title">Travaillons <span>ensemble</span></h2>
+                    <p data-i18n="contact.sub">Un projet en tête, une offre de stage ou d'emploi, ou simplement envie
+                        d'échanger ? Écrivez-moi.</p>
                     <div class="contact-item"><i class="fas fa-envelope"></i>
                         <div><small>Email</small><a href="mailto:agbotonnoham@gmail.com">agbotonnoham@gmail.com</a>
                         </div>
                     </div>
                     <div class="contact-item"><i class="fas fa-phone"></i>
-                        <div><small>Téléphone</small><a href="tel:+33783277197">+33 7 83 27 71 97</a></div>
+                        <div><small data-i18n="contact.phone">Téléphone</small><a href="tel:+33783277197">+33 7 83 27
+                                71 97</a></div>
                     </div>
                     <div class="contact-item"><i class="fas fa-location-dot"></i>
-                        <div><small>Localisation</small>Strasbourg, France</div>
+                        <div><small data-i18n="contact.location">Localisation</small>Strasbourg, France</div>
                     </div>
                     <div class="socials">
                         <a href="https://github.com/nonowagbt" target="_blank" rel="noopener" title="GitHub"
@@ -1609,32 +1751,36 @@
                 <form class="form" id="contact-form">
                     <div class="form-row">
                         <div>
-                            <label for="nom">Nom</label>
-                            <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
+                            <label for="nom" data-i18n="form.name">Nom</label>
+                            <input type="text" id="nom" name="nom" placeholder="Votre nom"
+                                data-i18n-ph="form.name.ph" required>
                         </div>
                         <div>
                             <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+                            <input type="email" id="email" name="email" placeholder="votre@email.com"
+                                data-i18n-ph="form.email.ph" required>
                         </div>
                     </div>
                     <div>
-                        <label for="sujet">Sujet</label>
-                        <input type="text" id="sujet" name="sujet" placeholder="Objet du message">
+                        <label for="sujet" data-i18n="form.subject">Sujet</label>
+                        <input type="text" id="sujet" name="sujet" placeholder="Objet du message"
+                            data-i18n-ph="form.subject.ph">
                     </div>
                     <div>
                         <label for="message">Message</label>
-                        <textarea id="message" name="message" placeholder="Votre message..." required></textarea>
+                        <textarea id="message" name="message" placeholder="Votre message..."
+                            data-i18n-ph="form.message.ph" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Envoyer le
-                        message</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> <span
+                            data-i18n="form.send">Envoyer le message</span></button>
                 </form>
             </div>
         </div>
     </section>
 
     <footer>
-        <div class="container">&copy; <span id="year">2026</span> Noham Agboton — Conçu &amp; développé avec passion
-        </div>
+        <div class="container">&copy; <span id="year">2026</span> Noham Agboton — <span data-i18n="footer">Conçu &amp;
+                développé avec passion</span></div>
     </footer>
 
     <script src="script.js"></script>
