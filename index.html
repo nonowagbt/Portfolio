@@ -642,6 +642,156 @@
             box-shadow: 0 0 8px var(--cyan);
         }
 
+        /* A PROPOS */
+        #a-propos {
+            background: var(--dark);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 2.5rem;
+            margin-top: 3.5rem;
+            align-items: start;
+        }
+
+        .about-text p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+        }
+
+        .about-text span {
+            color: var(--cyan);
+        }
+
+        .about-facts {
+            background: var(--dark-card);
+            border: 1px solid var(--border);
+            padding: 1.8rem 2rem;
+            clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+        }
+
+        .about-fact {
+            display: flex;
+            gap: 1rem;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .about-fact:last-child {
+            border-bottom: none;
+        }
+
+        .about-fact i {
+            color: var(--cyan);
+            width: 1.2rem;
+            margin-top: 0.25rem;
+        }
+
+        .about-fact strong {
+            display: block;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            font-weight: normal;
+        }
+
+        /* EXPERIENCE & FORMATION */
+        #experience {
+            background: var(--dark);
+        }
+
+        #formation {
+            background: linear-gradient(180deg, var(--dark-mid) 0%, var(--dark) 100%);
+        }
+
+        .timeline {
+            position: relative;
+            margin-top: 3.5rem;
+            max-width: 860px;
+            border-left: 1px solid var(--border);
+            padding-left: 2rem;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2.5rem;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: calc(-2rem - 6px);
+            top: 0.35rem;
+            width: 11px;
+            height: 11px;
+            background: var(--dark);
+            border: 2px solid var(--cyan);
+            box-shadow: var(--glow-cyan);
+            transform: rotate(45deg);
+        }
+
+        #formation .timeline-item::before {
+            border-color: var(--purple);
+            box-shadow: var(--glow-purple);
+        }
+
+        .timeline-date {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: var(--cyan);
+            margin-bottom: 0.4rem;
+        }
+
+        #formation .timeline-date {
+            color: var(--purple);
+        }
+
+        .timeline-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .timeline-place {
+            color: var(--text-dim);
+            margin: 0.2rem 0 0.8rem;
+        }
+
+        .timeline-list {
+            list-style: none;
+        }
+
+        .timeline-list li {
+            position: relative;
+            padding-left: 1.4rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .timeline-list li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--cyan);
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* PROJETS */
         #projets {
             background: var(--dark);
@@ -1131,8 +1281,9 @@
             <a href="#accueil" class="nav-logo">N.AGT</a>
             <ul class="nav-links">
                 <li><a href="#accueil">Accueil</a></li>
-                <li><a href="#competences">Compétences</a></li>
                 <li><a href="#projets">Projets</a></li>
+                <li><a href="#competences">Compétences</a></li>
+                <li><a href="#experience">Expérience</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <button class="nav-mobile-btn" id="mobile-menu-btn" aria-label="Menu">
@@ -1141,8 +1292,9 @@
         </div>
         <div class="mobile-menu" id="mobile-menu">
             <a href="#accueil">Accueil</a>
-            <a href="#competences">Compétences</a>
             <a href="#projets">Projets</a>
+            <a href="#competences">Compétences</a>
+            <a href="#experience">Expérience</a>
             <a href="#contact">Contact</a>
         </div>
     </nav>
@@ -1155,14 +1307,13 @@
         <div class="hero-deco hero-deco-2"></div>
 
         <div class="hero-content">
-            <div class="hero-tag">Développeur &amp; Étudiant Epitech</div>
+            <div class="hero-tag">Développeur Fullstack &amp; Logiciel — Epitech</div>
             <h1 class="hero-name">
                 Bonjour, je suis<br>
                 <span class="glitch" data-text="NOHAM">NOHAM</span>
             </h1>
             <p class="hero-subtitle">
-                Passionné par <span>l'innovation technologique</span> et la création de solutions numériques qui font la
-                différence.
+                Je transforme des <span>idées</span> en applications.
             </p>
             <div class="hero-btns">
                 <a href="#projets" class="btn-primary">Voir mes projets</a>
@@ -1171,129 +1322,38 @@
         </div>
     </section>
 
-    <!-- COMPETENCES -->
-    <section id="competences">
+    <!-- A PROPOS -->
+    <section id="a-propos">
         <div class="container">
             <div class="reveal">
-                <div class="section-tag">Aptitudes</div>
-                <h2 class="section-title">Mes <span>Compétences</span></h2>
-                <p class="section-sub">Développées à Epitech et en autodidacte, constamment affinées.</p>
+                <div class="section-tag">Profil</div>
+                <h2 class="section-title">À <span>Propos</span></h2>
             </div>
 
-            <div class="skills-grid">
-                <div class="skill-card reveal">
-                    <div class="skill-icon"><i class="fas fa-code"></i></div>
-                    <h3>Langages</h3>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>C</span><span>90%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="90%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>Python</span><span>85%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="85%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>JavaScript</span><span>80%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="80%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>Shell</span><span>75%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="75%"></div>
-                        </div>
-                    </div>
+            <div class="about-grid">
+                <div class="about-text reveal-left">
+                    <p>Développeur <span>Fullstack &amp; Logiciel</span> en 5ème année à EPITECH, actuellement en stage
+                        de fin d'études. Passionné par l'informatique, je suis spécialisé dans le développement
+                        <span>Web et Mobile</span>, avec une spécialisation <span>IoT / AIoT</span> acquise à EPITECH
+                        Barcelone.</p>
+                    <p>Je maîtrise les stacks Core et DevOps, et j'aime concevoir, développer et déployer des
+                        solutions logicielles robustes, du front-end jusqu'à l'infrastructure, toujours en équipe.</p>
                 </div>
-
-                <div class="skill-card reveal" style="transition-delay:0.1s">
-                    <div class="skill-icon"><i class="fas fa-laptop-code"></i></div>
-                    <h3>Web Dev</h3>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>HTML/CSS</span><span>85%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="85%"></div>
-                        </div>
+                <div class="about-facts reveal-right">
+                    <div class="about-fact"><i class="fas fa-map-marker-alt"></i>
+                        <div><strong>Basé à</strong>Strasbourg — Permis B (véhiculé)</div>
                     </div>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>React</span><span>75%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="75%"></div>
-                        </div>
+                    <div class="about-fact"><i class="fas fa-graduation-cap"></i>
+                        <div><strong>Formation</strong>EPITECH — Expert en Ingénierie Logicielle (Bac+5)</div>
                     </div>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>Node.js</span><span>70%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="70%"></div>
-                        </div>
+                    <div class="about-fact"><i class="fas fa-microchip"></i>
+                        <div><strong>Spécialité</strong>IoT &amp; AIoT</div>
                     </div>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>SQL</span><span>65%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="65%"></div>
-                        </div>
+                    <div class="about-fact"><i class="fas fa-language"></i>
+                        <div><strong>Langues</strong>Français, Anglais (B1), Espagnol (A1)</div>
                     </div>
-                </div>
-
-                <div class="skill-card reveal" style="transition-delay:0.2s">
-                    <div class="skill-icon"><i class="fas fa-server"></i></div>
-                    <h3>Système</h3>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>Linux</span><span>80%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="80%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>Réseaux</span><span>70%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="70%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>Docker</span><span>65%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="65%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>Bash</span><span>75%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="75%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="skill-card reveal" style="transition-delay:0.3s">
-                    <div class="skill-icon"><i class="fas fa-tools"></i></div>
-                    <h3>Outils</h3>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>Git</span><span>85%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="85%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>Makefile</span><span>80%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="80%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>GDB</span><span>70%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="70%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-item-header"><span>Valgrind</span><span>65%</span></div>
-                        <div class="skill-bar-track">
-                            <div class="skill-bar-fill" style="width:0" data-width="65%"></div>
-                        </div>
+                    <div class="about-fact"><i class="fas fa-futbol"></i>
+                        <div><strong>Loisirs</strong>Football en club, musculation</div>
                     </div>
                 </div>
             </div>
@@ -1432,6 +1492,378 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- SmartPlanner -->
+                <div class="project-card reveal">
+                    <div class="project-img project-img-1">
+                        <span class="project-no">[ 06 ]</span>
+                        <i class="fas fa-calendar-alt project-img-icon project-img-icon-cyan"></i>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">SmartPlanner</h3>
+                        <p class="project-desc">Application de planification intelligente pour organiser ses tâches et son emploi du temps.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Web App</span>
+                            <span class="project-tag">Planning</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/nonowagbt" target="_blank" class="project-link">
+                                <i class="fab fa-github"></i> Repository
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AREA -->
+                <div class="project-card reveal" style="transition-delay:0.1s">
+                    <div class="project-img project-img-2">
+                        <span class="project-no">[ 07 ]</span>
+                        <i class="fas fa-project-diagram project-img-icon project-img-icon-purple"></i>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">AREA</h3>
+                        <p class="project-desc">Plateforme d'automatisation façon IFTTT / Zapier : une action sur un service déclenche une réaction sur un autre. Serveur, client web et client mobile. Projet Epitech.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">API REST</span>
+                            <span class="project-tag">OAuth2</span>
+                            <span class="project-tag">Web</span>
+                            <span class="project-tag">Mobile</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/nonowagbt" target="_blank" class="project-link">
+                                <i class="fab fa-github"></i> Repository
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- R-TYPE -->
+                <div class="project-card reveal" style="transition-delay:0.2s">
+                    <div class="project-img project-img-3">
+                        <span class="project-no">[ 08 ]</span>
+                        <i class="fas fa-rocket project-img-icon project-img-icon-green"></i>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">R-TYPE</h3>
+                        <p class="project-desc">Remake multijoueur en réseau du shoot'em up R-Type : moteur de jeu maison et architecture client / serveur. Projet Epitech.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">C++</span>
+                            <span class="project-tag">ECS</span>
+                            <span class="project-tag">UDP</span>
+                            <span class="project-tag">CMake</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/nonowagbt" target="_blank" class="project-link">
+                                <i class="fab fa-github"></i> Repository
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IoT / ESP32 -->
+                <div class="project-card reveal" style="transition-delay:0.3s">
+                    <div class="project-img project-img-4">
+                        <span class="project-no">[ 09 ]</span>
+                        <i class="fas fa-microchip project-img-icon project-img-icon-cyan"></i>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">IoT / ESP32</h3>
+                        <p class="project-desc">Objet connecté sur microcontrôleur ESP32 : lecture de capteurs, envoi des données et pilotage à distance. Réalisé pendant la spécialisation IoT / AIoT à Epitech Barcelone.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">ESP32</span>
+                            <span class="project-tag">IoT</span>
+                            <span class="project-tag">C++</span>
+                            <span class="project-tag">MQTT</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/nonowagbt" target="_blank" class="project-link">
+                                <i class="fab fa-github"></i> Repository
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPETENCES -->
+    <section id="competences">
+        <div class="container">
+            <div class="reveal">
+                <div class="section-tag">Aptitudes</div>
+                <h2 class="section-title">Mes <span>Compétences</span></h2>
+                <p class="section-sub">Développées à Epitech (Strasbourg &amp; Barcelone), en entreprise et en autodidacte.</p>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill-card reveal">
+                    <div class="skill-icon"><i class="fas fa-laptop-code"></i></div>
+                    <h3>Frontend</h3>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>HTML/CSS</span><span>85%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="85%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>JavaScript</span><span>80%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="80%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>TypeScript</span><span>75%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="75%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>React.js</span><span>75%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="75%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Vue.js</span><span>65%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="65%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>WordPress</span><span>70%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="70%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card reveal" style="transition-delay:0.1s">
+                    <div class="skill-icon"><i class="fas fa-server"></i></div>
+                    <h3>Backend</h3>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>C</span><span>90%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="90%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>C++</span><span>80%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="80%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Node.js</span><span>70%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="70%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>PHP</span><span>75%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="75%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Laravel</span><span>70%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="70%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Go</span><span>65%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="65%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>SQL</span><span>70%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="70%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card reveal" style="transition-delay:0.2s">
+                    <div class="skill-icon"><i class="fas fa-cogs"></i></div>
+                    <h3>DevOps</h3>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Linux</span><span>80%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="80%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Shell (Bash)</span><span>75%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="75%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Git</span><span>85%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="85%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Docker</span><span>70%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="70%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Ansible</span><span>60%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="60%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>CI/CD</span><span>65%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="65%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Réseaux</span><span>70%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="70%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Makefile</span><span>80%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="80%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>GDB / Valgrind</span><span>70%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="70%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Méthodes Agiles</span><span>75%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="75%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card reveal" style="transition-delay:0.3s">
+                    <div class="skill-icon"><i class="fas fa-microchip"></i></div>
+                    <h3>IoT</h3>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Systèmes embarqués</span><span>70%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="70%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Objets connectés</span><span>75%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="75%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card reveal" style="transition-delay:0.4s">
+                    <div class="skill-icon"><i class="fas fa-brain"></i></div>
+                    <h3>IA</h3>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>Python</span><span>85%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="85%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-item-header"><span>IA appliquée à l'IoT</span><span>65%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" style="width:0" data-width="65%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+        <div class="container">
+            <div class="reveal">
+                <div class="section-tag">Parcours</div>
+                <h2 class="section-title">Mon <span>Expérience</span></h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item reveal">
+                    <div class="timeline-date">2024 – 2025</div>
+                    <h3 class="timeline-title">Support Info. &amp; Développeur Fullstack (Stage)</h3>
+                    <div class="timeline-place">GIP-FCIP — Strasbourg</div>
+                    <ul class="timeline-list">
+                        <li>Développement Fullstack : front-end (HTML/CSS/JS) et back-end (PHP/Node.js).</li>
+                        <li>Architecture : gestion de l'architecture des bases de données SQL.</li>
+                        <li>Maintenance : support et maintenance du matériel informatique.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item reveal" style="transition-delay:0.1s">
+                    <div class="timeline-date">2023</div>
+                    <h3 class="timeline-title">Support Informatique</h3>
+                    <div class="timeline-place">C.A.F. — Strasbourg</div>
+                    <ul class="timeline-list">
+                        <li>Assistance utilisateur (N1) et résolution de pannes matérielles.</li>
+                        <li>Gestion de l'inventaire et remplacement du parc informatique.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item reveal" style="transition-delay:0.2s">
+                    <div class="timeline-date">2023</div>
+                    <h3 class="timeline-title">Développeur Fullstack (Stage)</h3>
+                    <div class="timeline-place">MikadoPublicis — Luxembourg</div>
+                    <ul class="timeline-list">
+                        <li>Back-end : implémentation de fonctionnalités avec PHP, Laravel et WordPress.</li>
+                        <li>Front-end : participation à l'intégration (HTML/CSS) et suivi de projet client.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORMATION -->
+    <section id="formation">
+        <div class="container">
+            <div class="reveal">
+                <div class="section-tag">Études</div>
+                <h2 class="section-title">Ma <span>Formation</span></h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item reveal">
+                    <div class="timeline-date">Depuis 2022</div>
+                    <h3 class="timeline-title">Expert en Ingénierie Logicielle (Bac+5 / RNCP7)</h3>
+                    <div class="timeline-place">EPITECH — Strasbourg</div>
+                    <ul class="timeline-list">
+                        <li>5ème et dernière année en cours (stage de fin d'études). Bachelor obtenu.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item reveal" style="transition-delay:0.1s">
+                    <div class="timeline-date">Cursus international</div>
+                    <h3 class="timeline-title">Spécialisation IoT &amp; AIoT</h3>
+                    <div class="timeline-place">EPITECH — Barcelone</div>
+                    <ul class="timeline-list">
+                        <li>Internet des Objets (IoT) et Intelligence Artificielle des Objets (AIoT).</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item reveal" style="transition-delay:0.2s">
+                    <div class="timeline-date">2019 – 2022</div>
+                    <h3 class="timeline-title">Baccalauréat Général Scientifique</h3>
+                    <div class="timeline-place">Lycée Sainte-Clotilde — Strasbourg</div>
+                    <ul class="timeline-list">
+                        <li>Spécialités : Physique-Chimie, Numérique et Sciences Informatiques (NSI).</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
@@ -1477,6 +1909,9 @@
                         </a>
                         <a href="https://github.com/nonowagbt" target="_blank" class="social-link" title="GitHub">
                             <i class="fab fa-github"></i>
+                        </a>
+                        <a href="mailto:agbotonnoham@gmail.com" class="social-link" title="Email">
+                            <i class="fas fa-envelope"></i>
                         </a>
                     </div>
                 </div>
