@@ -1,154 +1,206 @@
-// ─── SCROLL PROGRESS ───
-const scrollProgress = document.getElementById('scroll-progress');
-window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset;
-    const docHeight = document.body.scrollHeight - window.innerHeight;
-    scrollProgress.style.width = ((scrollTop / docHeight) * 100) + '%';
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ─── STARFIELD ───
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function resizeStars() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = Math.round((window.innerWidth * window.innerHeight) / 6000);
+    stars = Array.from({ length: count }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 1.1 + 0.2,
+        a: Math.random() * 0.6 + 0.15,
+        s: Math.random() * 0.15 + 0.03,
+        t: Math.random() * Math.PI * 2
+    }));
+}
+
+function drawStars() {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    for (const st of stars) {
+        st.t += 0.02;
+        if (!reduceMotion) {
+            st.y -= st.s;
+            if (st.y < -2) st.y = window.innerHeight + 2;
+        }
+        const alpha = st.a * (0.7 + 0.3 * Math.sin(st.t));
+        ctx.beginPath();
+        ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+        ctx.fill();
+    }
+    if (!reduceMotion) requestAnimationFrame(drawStars);
+}
+
+resizeStars();
+drawStars();
+window.addEventListener('resize', () => {
+    resizeStars();
+    if (reduceMotion) drawStars();
 });
 
-// ─── MOBILE MENU ───
+// ─── NAV ───
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
 
 mobileMenuBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('open');
-    const icon = mobileMenuBtn.querySelector('i');
-    icon.className = mobileMenu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+    const open = mobileMenu.classList.toggle('open');
+    mobileMenuBtn.setAttribute('aria-expanded', open);
+    mobileMenuBtn.querySelector('i').className = open ? 'fas fa-times' : 'fas fa-bars';
 });
 
-// Close mobile menu on link click
 mobileMenu.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
         mobileMenu.classList.remove('open');
+        mobileMenuBtn.setAttribute('aria-expanded', false);
         mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
     });
 });
 
-// ─── SMOOTH SCROLL ───
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            window.scrollTo({
-                top: target.offsetTop - 64,
-                behavior: 'smooth'
-            });
-        }
+const navLinks = document.querySelectorAll('.nav-links a');
+const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+        });
     });
-});
+}, { rootMargin: '-45% 0px -50% 0px' });
 
-// ─── INTERSECTION OBSERVER (REVEAL) ───
+document.querySelectorAll('section[id]').forEach(s => navObserver.observe(s));
+
+// ─── REVEAL ON SCROLL ───
 const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
         }
     });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
-    revealObserver.observe(el);
-});
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-// ─── SKILL BARS ANIMATION ───
-const skillBarObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
-                const targetWidth = bar.getAttribute('data-width');
-                setTimeout(() => {
-                    bar.style.width = targetWidth;
-                }, 100);
-            });
-            skillBarObserver.unobserve(entry.target);
+// ─── TERMINAL ───
+const terminal = document.getElementById('terminal');
+const script = [
+    { cmd: 'whoami' },
+    { out: '<span class="out">noham_agboton — fullstack &amp; software developer</span>' },
+    { cmd: 'ls -la skills/' },
+    { out: '<span class="perm">drwxr-xr-x</span>  <span class="out">8 languages</span>' },
+    { out: '<span class="perm">drwxr-xr-x</span>  <span class="out">frontend_frameworks</span>' },
+    { out: '<span class="perm">drwxr-xr-x</span>  <span class="out">backend_systems</span>' },
+    { out: '<span class="perm">drwxr-xr-x</span>  <span class="out">devops_tools</span>' },
+    { out: '<span class="perm">drwxr-xr-x</span>  <span class="out">iot_aiot</span>' },
+    { cmd: 'cat status.txt' },
+    { out: '<span class="out">5ème année @ Epitech · stage de fin d\'études</span>' },
+    { cmd: '' }
+];
+
+const PROMPT = '<span class="prompt">$</span> ';
+const CURSOR = '<span class="cursor"></span>';
+
+function renderTerminal() {
+    if (reduceMotion) {
+        terminal.innerHTML = script.map(l => l.out !== undefined ? l.out : PROMPT + l.cmd).join('\n') + CURSOR;
+        return;
+    }
+    let html = '';
+    let line = 0;
+
+    function next() {
+        if (line >= script.length) return;
+        const l = script[line++];
+        if (l.out !== undefined) {
+            html += l.out + '\n';
+            terminal.innerHTML = html + CURSOR;
+            setTimeout(next, 120);
+            return;
         }
-    });
-}, { threshold: 0.3 });
+        let i = 0;
+        html += PROMPT;
+        (function type() {
+            terminal.innerHTML = html + l.cmd.slice(0, i) + CURSOR;
+            if (i < l.cmd.length) {
+                i++;
+                setTimeout(type, 55 + Math.random() * 50);
+            } else if (line < script.length) {
+                html += l.cmd + '\n';
+                setTimeout(next, 350);
+            }
+        })();
+    }
+    next();
+}
 
-document.querySelectorAll('.skill-card').forEach(card => {
-    skillBarObserver.observe(card);
-});
+setTimeout(renderTerminal, 500);
 
-// ─── TYPING CURSOR IN HERO TAG ───
-// Already handled via CSS ::after pseudo-element with blink animation
+// ─── SKILL TABS ───
+const skillTabs = document.querySelectorAll('#skill-tabs .tab');
+const skills = document.querySelectorAll('#skills-grid .skill');
 
-// ─── CONTACT FORM ───
-const contactForm = document.getElementById('contact-form');
-const submitBtn = document.getElementById('submit-btn');
-
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const original = submitBtn.textContent;
-        submitBtn.textContent = 'Transmission en cours...';
-        submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.6';
-
-        setTimeout(() => {
-            submitBtn.textContent = '// Message envoyé !';
-            submitBtn.style.borderColor = 'var(--green)';
-            submitBtn.style.color = 'var(--green)';
-            submitBtn.style.opacity = '1';
-
-            setTimeout(() => {
-                submitBtn.textContent = original;
-                submitBtn.disabled = false;
-                submitBtn.style.borderColor = '';
-                submitBtn.style.color = '';
-                this.reset();
-            }, 2500);
-        }, 1500);
+function showSkills(cat) {
+    skills.forEach(s => {
+        s.hidden = !s.dataset.cat.split(' ').includes(cat);
     });
 }
 
-// ─── NAV ACTIVE LINK HIGHLIGHT ON SCROLL ───
-const navLinks = document.querySelectorAll('.nav-links a, .mobile-menu a');
-const sections = document.querySelectorAll('section[id]');
-
-const navObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            navLinks.forEach(link => {
-                link.style.color = '';
-                if (link.getAttribute('href') === '#' + entry.target.id) {
-                    link.style.color = 'var(--cyan)';
-                }
-            });
-        }
+skillTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        skillTabs.forEach(t => t.classList.toggle('active', t === tab));
+        showSkills(tab.dataset.filter);
     });
-}, { threshold: 0.4 });
+});
+showSkills('lang');
 
-sections.forEach(s => navObserver.observe(s));
+// ─── PROJECT FILTER & SEARCH ───
+const projectTabs = document.querySelectorAll('#project-tabs .tab');
+const projects = document.querySelectorAll('#projects-grid .project');
+const search = document.getElementById('project-search');
+const empty = document.getElementById('projects-empty');
+let projectFilter = 'all';
 
-// ─── MOUSE PARALLAX ON HERO DECO ───
-const heroDeco1 = document.querySelector('.hero-deco-1');
-const heroDeco2 = document.querySelector('.hero-deco-2');
+function filterProjects() {
+    const q = search.value.trim().toLowerCase();
+    let visible = 0;
+    projects.forEach(p => {
+        const inCat = projectFilter === 'all' || p.dataset.cat.split(' ').includes(projectFilter);
+        const match = !q || p.textContent.toLowerCase().includes(q);
+        p.hidden = !(inCat && match);
+        if (!p.hidden) visible++;
+    });
+    empty.style.display = visible ? 'none' : 'block';
+}
 
-document.addEventListener('mousemove', (e) => {
-    if (!heroDeco1 || !heroDeco2) return;
-    const x = (e.clientX / window.innerWidth - 0.5) * 20;
-    const y = (e.clientY / window.innerHeight - 0.5) * 20;
-    heroDeco1.style.transform = `translate(${x}px, ${y}px) rotate(${x * 0.5}deg)`;
-    heroDeco2.style.transform = `translate(${-x * 0.7}px, ${-y * 0.7}px) rotate(${-x * 0.3}deg)`;
+projectTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        projectTabs.forEach(t => t.classList.toggle('active', t === tab));
+        projectFilter = tab.dataset.filter;
+        filterProjects();
+    });
+});
+search.addEventListener('input', filterProjects);
+
+// ─── CONTACT FORM (opens the visitor's mail client) ───
+document.getElementById('contact-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const data = new FormData(this);
+    const subject = data.get('sujet') || `Contact portfolio — ${data.get('nom')}`;
+    const body = `${data.get('message')}\n\n${data.get('nom')} (${data.get('email')})`;
+    window.location.href = `mailto:agbotonnoham@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 });
 
-// ─── CURSOR GLOW (subtle) ───
-const cursorGlow = document.createElement('div');
-cursorGlow.style.cssText = `
-    position: fixed;
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    background: radial-gradient(ellipse, rgba(0,245,255,0.035) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 9997;
-    transform: translate(-50%, -50%);
-    transition: left 0.15s, top 0.15s;
-`;
-document.body.appendChild(cursorGlow);
-
-document.addEventListener('mousemove', (e) => {
-    cursorGlow.style.left = e.clientX + 'px';
-    cursorGlow.style.top = e.clientY + 'px';
-});
+document.getElementById('year').textContent = new Date().getFullYear();
