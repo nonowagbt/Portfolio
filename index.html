@@ -306,13 +306,36 @@
             align-items: center;
         }
 
-        .hero-title {
-            font-size: clamp(2.4rem, 5.4vw, 4rem);
-            line-height: 1.08;
-            font-weight: 600;
-            letter-spacing: -0.03em;
+        .hero-hello {
+            font-family: var(--mono);
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            margin-top: 1.6rem;
+        }
+
+        .hero-name {
+            font-size: clamp(2.8rem, 6.4vw, 4.8rem);
+            line-height: 1.02;
+            font-weight: 700;
+            letter-spacing: -0.035em;
             color: #fff;
-            margin: 1.4rem 0 1.2rem;
+            margin: 0.3rem 0 0.9rem;
+        }
+
+        .hero-name span {
+            background: linear-gradient(90deg, #fff 10%, var(--accent-soft));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-title {
+            font-size: clamp(1.4rem, 2.8vw, 2rem);
+            line-height: 1.2;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            color: #fff;
+            margin-bottom: 1rem;
         }
 
         .hero-title span {
@@ -1115,7 +1138,7 @@
     <!-- NAV -->
     <nav id="nav">
         <div class="nav-inner">
-            <a href="#accueil" class="nav-logo">&lt;<span>/</span>&gt; noham</a>
+            <a href="#accueil" class="nav-logo">&lt;<span>/</span>&gt; noham_agboton</a>
             <ul class="nav-links">
                 <li><a href="#accueil">Accueil</a></li>
                 <li><a href="#projets">Projets</a></li>
@@ -1141,7 +1164,9 @@
         <div class="container hero-grid">
             <div class="reveal">
                 <span class="pill"><i class="fas fa-circle"></i> Développeur Fullstack &amp; Logiciel</span>
-                <h1 class="hero-title">Je transforme des <span>idées</span> en applications.</h1>
+                <p class="hero-hello">Bonjour, je suis</p>
+                <h1 class="hero-name">Noham <span>Agboton</span></h1>
+                <p class="hero-title">Je transforme des <span>idées</span> en applications.</p>
                 <p class="hero-sub">Étudiant en 5ème année à Epitech, je conçois et déploie des applications web,
                     mobiles et IoT, du front-end jusqu'à l'infrastructure.</p>
                 <div class="hero-chips">
