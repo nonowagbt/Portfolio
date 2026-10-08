@@ -173,7 +173,7 @@
             color: var(--heading);
         }
 
-        .nav-logo span {
+        .nav-logo span:first-child {
             color: var(--accent-soft);
         }
 
@@ -1206,6 +1206,10 @@
         }
 
         @media (max-width: 420px) {
+            .logo-text {
+                display: none;
+            }
+
             .skills-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -1238,7 +1242,7 @@
     <!-- NAV -->
     <nav id="nav">
         <div class="nav-inner">
-            <a href="#accueil" class="nav-logo">&lt;<span>/</span>&gt; noham_agboton</a>
+            <a href="#accueil" class="nav-logo" aria-label="Noham Agboton">&lt;<span>/</span>&gt;<span class="logo-text"> noham_agboton</span></a>
             <ul class="nav-links">
                 <li><a href="#accueil" data-i18n="nav.home">Accueil</a></li>
                 <li><a href="#projets" data-i18n="nav.projects">Projets</a></li>
